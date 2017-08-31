@@ -5,13 +5,18 @@
 #include <cstring>
 #include <cmath>
 #include <iomanip>
+#include <cfloat>
 
 #define FEATURES 90
 #define TEST_SIZE 0.05
-#define LR 1e-4
+#define LR 1e-2
 #define PR 1e-7
 
 using namespace std;
+
+double sq(double a){
+  return a * a;
+}
 
 double calculate_y(vector<double> x, vector<double> coeff, double intercept){
   double acc = 0;
@@ -88,16 +93,12 @@ int fit(vector<double> &coeff, double &intercept, vector< vector<double> > &data
       i_grad += -(2 / m) * (y - (calculate_y(data_x[i], coeff, intercept)));
 
       double h = calculate_y(data_x[i], coeff, intercept);
-      for(int j = 14; j < 15; j++)
+      for(int j = 0; j < n; j++)
         c_grad[j] += -(2 / m) * data_x[i][j] * (y - h);
-      // c_grad[0] += -(2 / m) * data_x[i][0] * (y - ((coeff[0] * data_x[i][0]) + (coeff[1] * data_x[i][1]) + intercept));
-      // c_grad[1] += -(2 / m) * data_x[i][1] * (y - ((coeff[0] * data_x[i][0]) + (coeff[1] * data_x[i][1]) + intercept));
     }
     intercept = intercept - (lr * i_grad);
-    for(int j = 14; j < 15; j++)
+    for(int j = 0; j < n; j++)
       coeff[j] = coeff[j] - (lr * c_grad[j]);
-    // coeff[0] = coeff[0] - (lr * c_grad[0]);
-    // coeff[1] = coeff[1] - (lr * c_grad[1]);
     // cout << intercept << " " << coeff[0] << " " << coeff[1] << endl;
 
     iterations++;
@@ -107,6 +108,22 @@ int fit(vector<double> &coeff, double &intercept, vector< vector<double> > &data
   }
 
   return iterations;
+}
+
+void normalize(vector< vector<double> > &data){
+  vector<double> min, max;
+  min.assign(data.front().size(), DBL_MAX);
+  max.assign(data.front().size(), -DBL_MAX);
+  for(int i = 0; i < data.size(); i++){
+    for(int j = 0; j < data.front().size(); j++){
+      min[j] = (min[j] < data[i][j] ? min[j] : data[i][j]);
+      max[j] = (max[j] > data[i][j] ? max[j] : data[i][j]);
+    }
+  }
+
+  for(int i = 0; i < data.size(); i++)
+    for(int j = 0; j < data.front().size(); j++)
+      data[i][j] = (data[i][j] - min[j]) / (max[j] - min[j]);
 }
 
 void train_test_split(vector< vector<double> > &values_x, vector<double> &values_y, vector< vector<double> > &val_x, vector< vector<double> > &train_x, vector<double> &val_y, vector<double> &train_y, double r){
@@ -119,10 +136,6 @@ void train_test_split(vector< vector<double> > &values_x, vector<double> &values
   train_x.insert(train_x.begin(), values_x.begin() + limit, values_x.end());
   train_y.insert(train_y.begin(), values_y.begin() + limit, values_y.end());
 
-}
-
-double sq(double a){
-  return a * a;
 }
 
 double predict(vector<double> coef, double intercept, vector< vector<double> > val_x, vector<double> val_y){
@@ -168,6 +181,8 @@ int main(){
   }
   values_x.pop_back();
   values_y.pop_back();
+
+  normalize(values_x);
 
   vector< vector<double> > train_x, val_x;
   vector<double> train_y, val_y;
