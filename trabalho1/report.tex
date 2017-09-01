@@ -1,0 +1,80 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
+\usepackage{cite}
+\usepackage[portuges,brazil,english]{babel}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage[utf8]{inputenc}
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+\begin{document}
+
+\title{Trabalho 1 - MC886 Aprendizado de Máquina}
+
+\author{\IEEEauthorblockN{Leo Yuuki Omori Omi}
+\IEEEauthorblockA{
+138684 \\
+leoyuuki@gmail.com}
+\and
+\IEEEauthorblockN{João Barney Ramos Lopes}
+\IEEEauthorblockA{
+RA \\
+jpredorl@gmail.com}}
+
+\maketitle
+
+\section{Introdução}
+
+Neste trabalho, contruímos um modelo para prever o ano de lançamento de uma música por característica do áudio usando o método de regressão linear.
+Tivemos como objetivo, explorar o método e criar o melhor modelo possível tentando evitar o overfitting.
+Além disso, tentaremos entender como os valores do \textit{Learning Rate} afeta o algoritmo do método do gradiente.
+
+Some directions for the paper:
+
+\begin{itemize}
+	\item Figures and graphics are encouraged for making the
+	report richer.
+	\item {\bf The sections proposed here are not hard-constrained}. It means you can propose other sections as well as change the existing ones.
+	\item Please number citations consecutively within brackets \cite{b1}. 
+\end{itemize}
+
+\section{Regressão Linear}
+ 
+A regressão linear é um método utilizado em aprendizado de máquina que, à partir de um conjunto de dados de treino que é dado ao algoritmo de treino, resulta em uma equação que estima um valor esperado à partir de outras variáveis dadas do mesmo tipo do conjunto de treino.
+Para implementação deste método de forma computacional, é utilizado o método da descida do gradiente, que é um método de otimização para se achar um mínimo local de forma iterativa.
+
+\section{Proposed Solutions}
+\subsection{Solução Base}
+Para uma solução base, foi utilizada a regressão linear usando todas as 90 \textit{features} de aúdio diretamente na função de regressão linear do Sickit Learn usando os valores padrões da função.
+
+\subsection{Solução Mais Complexa}
+Para uma solução melhor que a base, decidimos por rodar diferentes experimentos em cima dos dados para que pudéssemos achar uma solução boa para o problema. Foram verificadas features que individualmente obtiam menores erros nas predições, graus diferentes para as features, entre outras manipulações dos dados com o objetivo de obter uma predição mais precisa.
+
+\subsection{Função de custo vs. Número de iterações e \textit{Learning rate} vs. Número de iterações}
+Para obtermos os dados da função de custo e iterações tivemos que implementar a regressão linear utilizando a descida de gradiente, já que a função do Scikit Learn não fornece estes dados. O algoritmo foi implementado em C++ para que pudéssemos extrair os dados e plotar os gráficos desejados.
+
+\section{Experiments and Discussion}
+Para todas os modelos de regressão linear, nos utilizamos de \textit{k-fold cross-validation}, com k=5 conjuntos, para verificarmos o funcionamento dos modelos. Para os experimentos, utilizamos estes conjuntos de dados para podermos ver o Erro Quadrático Médio da predição do conjunto de treino e do conjunto de validação para verificarmos se houve \textit{overfitting} (ou \textit{underfitting}). Como medição de precisão antes de utilizar o conjunto de testes, calculamos a média do erro quadrático médio da predição do treino e da validação dentro dos 5 conjuntos da cross-validação.
+
+\subsection{Solução Base}
+A solução base, que utiliza todas as 90 \textit{features}, obteve um erro quadrático médio de 91.25 para a predição do conjunto de treino e de 91.30, o que já é um resultado consideravelmente bom.
+
+\subsection{Solução Mais Complexa}
+Para obter uma solução mais complexas com melhores resultados, decidimos utilizar os dados de novas maneiras, e rodamos diferentes experimentos para obter um modelo mais preciso. Um dos primeiros experimentos foi separar os dados de timbre médio, utilizar a regressão linear apenas com estes dados e aumentar o grau do polinômio para todos estes dados para checar se poderíamos obter um erro menor. Ao mesmo tempo, verficamos se havia uma discrepância muito grande entre o erro quadrático médio da predição do conjunto de treino e o erro do conjunto de validação, pois poderia indicar overfitting caso aumentássemos muito o grau do polinômio. O mesmo foi feito então para os dados de covariância do timbre. O intuito de separar os dois tipos de dados, foi a ideia de que um conjunto de dados teria um compartamento similar dentro de dele mesmo, mas teria um comportamento diferente do outro tipo.
+
+Para os dados de timbre médio, até polinômios de grau 7, a discrepância entre os erros não aumentava muito. No entanto, o erro não diminuía muito, e para grau 5 o coeficiente linear resultante foi de 2029, o que e para grau 4 foi de 1968, o que parece ser mais razoável, portanto decidimos por utilizar o timbre médio até o quarto grau no nosso modelo. Para a covariância do timbre, começa a ocorrer uma discrepância entre os erros do conjunto de treino e de validação à partir do quarto grau, portanto utilizamos o terceiro grau.
+
+Para esta solução foi obtido um erro para conjunto de treino de 86.96 e para o conjunto de validação de 87.78. 
+
+\section{Conclusions and Future Work}
+
+The main conclusions of the work as well as some future directions for other people interested in continuing this work. 
+
+\begin{thebibliography}{00}
+\bibitem{b1} Christopher M. Bishop. ``Pattern Recognition and Machine Learning''. Springer-Verlag New York, Inc., Secaucus, NJ, USA, 2006. 
+\end{thebibliography}
+
+\end{document}
