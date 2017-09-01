@@ -9,6 +9,7 @@
 
 #define FEATURES 90
 #define TEST_SIZE 0.05
+#define NUM_ITERATIONS 25
 #define LR 1e-2
 #define PR 1e-7
 
@@ -72,7 +73,7 @@ vector<double> subV(vector<double> a, vector<double> b){
   return r;
 }
 
-int fit(vector<double> &coeff, double &intercept, vector< vector<double> > &data_x, vector<double> &data_y, double lr, double pr){
+int fit(vector<double> &coeff, double &intercept, vector< vector<double> > &data_x, vector<double> &data_y, double lr, double pr, int num_it, vector<bool> weights){
 
   double n = data_x[0].size();
   double m = data_y.size();
@@ -84,7 +85,7 @@ int fit(vector<double> &coeff, double &intercept, vector< vector<double> > &data
   double i_grad;
   vector<double> c_grad;
 
-  while(true){
+  while(num_it--){
     i_grad = 0;
     c_grad.assign(n, 0);
 
@@ -94,17 +95,16 @@ int fit(vector<double> &coeff, double &intercept, vector< vector<double> > &data
 
       double h = calculate_y(data_x[i], coeff, intercept);
       for(int j = 0; j < n; j++)
-        c_grad[j] += -(2 / m) * data_x[i][j] * (y - h);
+        if(weights[j])
+          c_grad[j] += -(2 / m) * data_x[i][j] * (y - h);
     }
+
     intercept = intercept - (lr * i_grad);
     for(int j = 0; j < n; j++)
-      coeff[j] = coeff[j] - (lr * c_grad[j]);
-    // cout << intercept << " " << coeff[0] << " " << coeff[1] << endl;
+      if(weights[j])
+        coeff[j] = coeff[j] - (lr * c_grad[j]);
 
     iterations++;
-    if(iterations >= 100)
-      break;
-
   }
 
   return iterations;
@@ -140,14 +140,20 @@ void train_test_split(vector< vector<double> > &values_x, vector<double> &values
 
 double predict(vector<double> coef, double intercept, vector< vector<double> > val_x, vector<double> val_y){
   double r = 0;
-  for(int i = 0; i < val_y.size(); i++){
+  for(int i = 0; i < val_y.size(); i++)
     r += sq(calculate_y(val_x[i], coef, intercept) - val_y[i]);
 
-    cout << calculate_y(val_x[i], coef, intercept) << " " << val_y[i] << endl;
-  }
-
-
   return sqrt(r / val_y.size());
+}
+
+double score(vector<double> coef, double intercept, vector< vector<double> > val_x, vector<double> val_y){
+  double count = 0;
+
+  for(int i = 0; i < val_y.size(); i++)
+    if((int)(calculate_y(val_x[i], coef, intercept)) == (int)(val_y[i]))
+      count++;
+
+  return count / val_y.size();
 }
 
 int main(){
@@ -191,11 +197,26 @@ int main(){
 
   vector<double> coef;
   double intercept;
-  cout << "Starting train" << endl;
-  fit(coef, intercept, train_x, train_y, LR, PR);
-  cout << "Done with training" << endl;
 
-  cout << predict(coef, intercept, val_x, val_y) << endl;
+  vector<bool>weights;
+  weights.assign(FEATURES, true);
+  weights[11] = false;
+  weights[8] = false;
+  weights[86] = false;
+  weights[35] = false;
+  weights[5] = false;
+  weights[2] = false;
+  weights[3] = false;
+  weights[77] = false;
+  weights[25] = false;
+  weights[40] = false;
+  weights[68] = false;
+  weights[45] = false;
+  weights[4] = false;
+
+  fit(coef, intercept, train_x, train_y, LR, PR, NUM_ITERATIONS, weights);
+
+  cout << fixed << setprecision(4) << predict(coef, intercept, val_x, val_y) << endl;
 
   return 0;
 }

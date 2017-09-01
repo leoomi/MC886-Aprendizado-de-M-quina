@@ -1,0 +1,50 @@
+Os dados são normalizados e divididos entre treino (95%) e validação (5%)
+Learning Rate de 1e-2
+
+
+rodando o stochastic para definir quais features devem sair:
+(1 iteração completa)
+Remove position: 11gain: 14.1386 to 14.05
+Remove position: 8gain: 14.039 to 13.9753
+Remove position: 86gain: 13.961 to 13.9144
+Remove position: 35gain: 13.914 to 13.8488
+Remove position: 5gain: 13.8419 to 13.8244
+Remove position: 2gain: 13.8157 to 13.7713
+Remove position: 3gain: 13.7663 to 13.7222
+Remove position: 77gain: 13.7173 to 13.6832
+Remove position: 25gain: 13.6716 to 13.6514
+Remove position: 40gain: 13.6414 to 13.6317
+Remove position: 68gain: 13.623 to 13.6118
+Remove position: 45gain: 13.6025 to 13.5936
+Remove position: 4gain: 13.5794 to 13.5708
+
+ganho com remoção no batch:
+(25 iterações)
+16.9823 -> 16.5902
+
+ganho com remoção no stochastic:
+(25 iterações completas)
+12.0169 -> 11.7527
+
+resultado do AG pela madrugada:
+pSize = 100
+mutação global = 20%
+mutação de locus = 20%
+mutação do interceptor = 50%
+crossover: escolhe um intervalo, alelos são do pai nesse intervalo e da mãe no outro intervalo
+1426, 17.5260: 43.6188 46.8993 16.6163 66.3741 45.5692 14.3916 42.7173 53.7089 43.1883 17.0245 86.6693 60.8385 -3.8164 34.0417 34.9005 -32.3374 -13.2603 42.0104 41.0008 20.7340 -44.9947 32.1290 -4.0665 -43.4429 53.7605 48.6267 54.6252 31.6774 43.0199 62.2619 69.2336 -4.4823 -11.7817 29.7333 58.9733 19.5927 47.4281 51.9655 38.1718 71.5353 88.0727 45.7834 68.3287 54.6052 53.4874 55.1870 52.2687 41.3993 54.8472 62.2784 37.4245 42.7455 10.7067 74.0753 59.6629 62.6860 71.0145 14.1857 67.6527 44.0612 69.3908 82.0039 52.2206 29.3639 48.1589 -1.1096 37.7961 51.1953 64.8367 53.5763 78.2607 78.4596 78.3794 -30.6419 46.0044 4.8999 35.0095 93.7450 41.1331 78.7732 73.6121 82.4799 14.0177 49.1179 62.5917 78.5443 70.7287 56.4932 11.5389 58.1667 : 66.0099
+
+resultado do AG pelo dia
+pSize = 25
+mutação = 20% (escolhe um intervalo e muta todos os genes)
+mutação do interceptor = 50%
+...
+
+configuração do AG:
+pSize
+cromossomo: todos os coeficientes e interceptor, no intervalo [-100, 100]
+crossover: para cada alelo, escolhe um valor aleatório b, que será o peso do pai e (1 - b) será o peso da mãe
+mutação: escolhe um intervalo, todos os alelos do intervalo serão rerandomizados
+
+elitismo: o melhor indivíduo será copiado para a nova geração
+seleção de pais: tornei de tamanho 4 para cada pai
