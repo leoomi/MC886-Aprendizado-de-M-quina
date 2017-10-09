@@ -6,6 +6,8 @@
 #include <cmath>
 #include <iomanip>
 #include <cfloat>
+#include <ctime>
+#include <cstdlib>
 
 #define FEATURES 90
 #define TEST_SIZE 0.05
@@ -24,89 +26,6 @@ double calculate_y(vector<double> x, vector<double> coeff, double intercept){
     acc += x[i] * coeff[i];
 
   return acc + intercept;
-}
-
-vector<double> product(vector<double> a, vector<double> b){
-  if(a.size() != b.size()){
-    cout << "Vectors should have the same size" << endl;
-    exit(1);
-  }
-
-  vector<double> r;
-  for(int i = 0; i < a.size(); i++)
-    r.push_back(a[i] * b[i]);
-
-  return r;
-}
-
-vector<double> product(vector<double> a, vector< vector<double> > b, int p){
-  if(a.size() != b.size()){
-    cout << "Vectors should have the same size" << endl;
-    exit(1);
-  }
-
-  vector<double> r;
-  for(int i = 0; i < a.size(); i++)
-    r.push_back(a[i] * b[i][p]);
-
-  return r;
-}
-
-double sum(vector<double> a){
-  double acc = 0;
-  for(int i = 0; i < a.size(); i++)
-    acc += a[i];
-  return acc;
-}
-
-vector<double> subV(vector<double> a, vector<double> b){
-  if(a.size() != b.size()){
-    cout << "Vectors should have the same size" << endl;
-    exit(1);
-  }
-
-  vector<double> r;
-  for(int i = 0; i < a.size(); i++)
-    r.push_back(a[i] - b[i]);
-
-  return r;
-}
-
-int fit(vector<double> &coeff, double &intercept, vector< vector<double> > &data_x, vector<double> &data_y, double lr, double pr, int num_iterations, vector<bool> weights){
-
-  double n = data_x[0].size();
-  double m = data_y.size();
-
-  intercept = 0;
-  coeff.assign(n, 0);
-
-  int iterations = 0;
-  double i_grad;
-  vector<double> c_grad;
-
-  while(num_iterations--){
-    for(int i = 0; i < m; i++){
-      i_grad = 0;
-      c_grad.assign(n, 0);
-
-      double y = data_y[i];
-      i_grad += -(y - (calculate_y(data_x[i], coeff, intercept)));
-
-      double h = calculate_y(data_x[i], coeff, intercept);
-      for(int j = 0; j < n; j++)
-        if(weights[j])
-          c_grad[j] += -data_x[i][j] * (y - h);
-
-      intercept = intercept - (lr * i_grad);
-      for(int j = 0; j < n; j++)
-        if(weights[j])
-          coeff[j] = coeff[j] - (lr * c_grad[j]);
-
-    }
-    iterations++;
-  }
-
-  return iterations;
 }
 
 void normalize(vector< vector<double> > &data){
@@ -155,6 +74,58 @@ double score(vector<double> coef, double intercept, vector< vector<double> > val
   return count / val_y.size();
 }
 
+class Chromosome{
+public:
+  vector<double> coefs;
+  double intercept;
+  double eval;
+  Chromosome(vector<double> coefs, double intercept) : coefs(coefs), intercept(intercept), eval(-1){
+  }
+
+  double evaluate(vector< vector<double> > x, vector<double> y){
+    if(eval != -1)
+      return eval;
+
+    int pos = rand() % x.size();
+
+    eval = predict(coefs, intercept, x, y);
+
+    return eval;
+  }
+
+  Chromosome crossover(Chromosome c){
+    Chromosome r(coefs, intercept);
+
+    for(int i = 0; i < coefs.size(); i++){
+      double b = ((double)(rand() % 100)) / 100.0;
+      r.coefs[i] = b * c.coefs[i] + (1 - b) * r.coefs[i];
+    }
+
+
+    double b = ((double)(rand() % 100)) / 100.0;
+    r.intercept = b * c.intercept + (1 - b) * r.intercept;
+
+    return r;
+  }
+
+  Chromosome mutate(){
+    if(rand() % 100 < 20){
+      int a = rand() % coefs.size();
+      int b = rand() % coefs.size();
+      if(b < a)
+        swap(a, b);
+
+      for(int i = a; i <= b; i++)
+        coefs[i] = rand() % 201 - 100;
+
+      if(rand() % 100 < 50)
+        intercept = rand() % 201 - 100;
+    }
+    return *this;
+  }
+
+};
+
 int main(){
   ios::sync_with_stdio(false);
 
@@ -194,35 +165,68 @@ int main(){
 
   train_test_split(values_x, values_y, val_x, train_x, val_y, train_y, TEST_SIZE);
 
-  vector<double> coef;
-  double intercept;
-  int it = 100;
+  srand(0);
 
-  vector<bool> weights;
-  weights.assign(FEATURES, true);
+  // build
+  cout << "Starting GA" << endl;
+  time_t start, curr;
+  time(&start);
+  vector< Chromosome > population, newPop;
+  int pSize = 25;
+  for(int i = 0; i < pSize; i++){
+    vector<double> coef;
+    double intercept;
+    for(int i = 0; i < FEATURES; i++)
+      coef.push_back(rand() % 201 - 100);
+    intercept = rand() % 201 - 100;
 
-  weights[11] = false;
-  weights[8] = false;
-  weights[86] = false;
-  weights[35] = false;
-  weights[5] = false;
-  weights[2] = false;
-  weights[3] = false;
-  weights[77] = false;
-  weights[25] = false;
-  weights[40] = false;
-  weights[68] = false;
-  weights[45] = false;
-  weights[4] = false;
+    population.push_back(Chromosome(coef, intercept));
+  }
 
-  fit(coef, intercept, train_x, train_y, LR, PR, it, weights);
+  int k = 0;
+  while(true){
+    for(int i = 0; i < pSize; i++){
+      if(population[i].evaluate(train_x, train_y) < population[0].evaluate(train_x, train_y))
+        swap(population[i], population[0]);
+    }
+    newPop.clear();
+    newPop.push_back(population.front());
 
-  cout << predict(coef, intercept, val_x, val_y) << endl;
+    cout << fixed << setprecision(4) << k++ << ", " << population.front().evaluate(train_x, train_y) << ": ";
+    for(int i = 0; i < population.front().coefs.size(); i++)
+      cout << population.front().coefs[i] << " ";
+    cout << ": " << population.front().intercept << endl;
+    time(&curr);
+    cout << "elapsed time: " << difftime(curr, start) << "s" << endl << endl;
 
-  for(int i = 0; i < coef.size(); i++)
-    cout << coef[i] << " ";
-  cout << endl;
-  cout << intercept << endl;
+    while(newPop.size() < pSize){
+      // chose parents
+      int a, b, t;
+      a = rand() % pSize;
+      b = rand() % pSize;
+      for(int i = 0; i < 3; i++){
+        do{
+          t = rand() % pSize;
+        }while(t == a);
+
+        if(population[a].evaluate(train_x, train_y) > population[t].evaluate(train_x, train_y))
+          a = t;
+      }
+
+      for(int i = 0; i < 3; i++){
+        do{
+          t = rand() % pSize;
+        }while(t == b || t == a);
+
+        if(population[b].evaluate(train_x, train_y) > population[t].evaluate(train_x, train_y))
+          b = t;
+      }
+
+      newPop.push_back(population[a].crossover(population[b]).mutate());
+    }
+
+    population = newPop;
+  }
 
   return 0;
 }
