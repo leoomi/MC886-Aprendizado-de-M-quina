@@ -31,9 +31,9 @@ for i in range(0, 50000):
     img = rgb2gray(io.imread(train_set_dir + filename)) #Reading file, converting to Grayscale
     img_data_original[i, :] = img.flatten()
 
-for i in range(10,50000,100):
+for i in range(15,1024,16):
     pca = PCA(n_components=i, whiten=True)
-    pca.fit(img_data)
+    pca.fit(img_data_original)
     img_data = pca.transform(img_data_original)
 
     # Split the data using K-Folds, using 5 different sets
@@ -56,7 +56,7 @@ for i in range(10,50000,100):
         print("Set %d -- Train Score: %.2f Validation score: %.2f"
               % (count, train_score[count-1], val_score[count-1]))
 
-        print("PCA: %.2f Mean Score Train: %.2f Mean Score Validation: %.2f" % (i, np.average(train_score), np.average(val_score)))
+    print("PCA: %.2f Mean Score Train: %.2f Mean Score Validation: %.2f" % (i, np.average(train_score), np.average(val_score)))
 
 
 

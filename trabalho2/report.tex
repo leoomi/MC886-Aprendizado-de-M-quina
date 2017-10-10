@@ -7,6 +7,8 @@
 \usepackage{algorithmic}
 \usepackage{graphicx}
 \usepackage{textcomp}
+\usepackage[export]{adjustbox}
+\usepackage{float}
 \usepackage[ruled,vlined,linesnumbered,portuguese]{algorithm2e}
 \usepackage[utf8]{inputenc}
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
@@ -48,7 +50,7 @@ A primeira solução proposta foi aplicar a regressão linear usando a classific
 Para analisar possíveis jeitos de melhorar o modelo, foram realizados três experimentos com o objetivo de melhorar a solução base. O primeiro foi utilizar um operador de bordas nas imagens e depois realizar a regressão logística. Foi utilizado o operador de Roberts implementado no Scikit-image. O segundo exprimento foi realizar uma segmentação da imagem e aplicar a regressão logística. A segmentação foi implementada utlizando a função de Otsu para obter uma limiar para cada imagem e criar uma máscara na imagem com o intuito de isolar o objeto do plano de fundo. O terceiro experimento foi utilizar a Análise de Compenentes Principais ou \textit{Principal Component Analysis} para reduzir a dimensionalidade do modelo, utilizando a implementação do Scikit-learn.
 
 \subsection{Solução Base (Multinomial)}
-Esta solução utiliza a Regressão Logística Multinomial, utilizando o melhor resultado entre os experimentos anteriores (níveis de cinza, operador de bordas ou segmentação). Para esta solução utilizamos a implementação de Regressão Logística do Scikit-learn, com o parâmetro multi\_class setado para \'multinomial\' e o parâmetro solver setado para \'sag\' (\textit{Stochastic Gradient Descent}).
+Esta solução utiliza a Regressão Logística Multinomial, utilizando o melhor resultado entre os experimentos anteriores (níveis de cinza, operador de bordas, segmentação ou PCA). Para esta solução utilizamos a implementação de Regressão Logística do Scikit-learn, com o parâmetro multi\_class setado para \'multinomial\' e o parâmetro solver setado para \'sag\' (\textit{Stochastic Gradient Descent}).
 
 \section{Experimentos}
 \subsection{Modelos iniciais}
@@ -58,22 +60,71 @@ Para o modelo base e de múltiplos graus de regressão logística, utilizamos de
 A solução base que utiliza como \textit{features} os níveis de cinza de todos os pixels da imagem obteve uma acurácia para o conjunto de testes de 35\% e para o de validação 28\%. A diferença de 7\% entre a acurárcia dos dois conjuntos indica que houve um pouco de \textit{overfitting} neste caso, e além disso, obtivemos um resultado pouco satisfatório.
 }
 \subsubsection{Solução Base Melhorada}
-Com o intuito de de melhorar a solução base, foram feitos experimentos utilizando funções de borda e de segmentação. A solução de função de borda trouxe resultados na média muito próximos à solução original. Poderíamos concluir à partir deste resultado, que a extração de bordas da imagem não extrai dados que sejam relevantes para a melhora do modelo, e é algo que a própria regressão logística sobre os valores de cinza da imagem original acaba considerando de certa maneira. A segunda solução utilizando a segmentação obteve resultados piores de acurácia. 30\% para o conjunto de testes e 21\% no conjunto de validação. A causa desta queda pode ser atribuído à técnica simples da segmentação, já que em alguns casos a máscara pode extrair o objeto da imagem e em outros o plano de fundo, dependendo dos níveis de cinza do objeto serem maiores ou menores que o do fundo. Portanto, não obtivemos melhoras significativas com estas soluções, portanto iremos utlizar os níveis de cinza como na primeira solução proposta para as próximas soluções do trabalho.
+Com o intuito de de melhorar a solução base, foram feitos experimentos utilizando funções de borda e de segmentação. A solução de função de borda trouxe resultados na média muito próximos à solução original. Poderíamos concluir à partir deste resultado, que a extração de bordas da imagem não extrai dados que sejam relevantes para a melhora do modelo, e é algo que a própria regressão logística sobre os valores de cinza da imagem original acaba considerando de certa maneira.
+
+\begin{figure}[H]
+  \includegraphics[center]{bor.png}
+  \caption{Operador de borda}
+  \label{fig:frog1}
+\end{figure}
+
+A segunda solução utilizando a segmentação obteve resultados piores de acurácia. 30\% para o conjunto de testes e 21\% no conjunto de validação. A causa desta queda pode ser atribuído à técnica simples da segmentação, já que em alguns casos a máscara pode extrair o objeto da imagem e em outros o plano de fundo, dependendo dos níveis de cinza do objeto serem maiores ou menores que o do fundo. Portanto, não obtivemos melhoras significativas com estas soluções, portanto iremos utlizar os níveis de cinza como na primeira solução proposta para as próximas soluções do trabalho.
+
+\begin{figure}[H]
+  \includegraphics[center]{seg1.png}
+  \caption{Segmentação isolando o plano de fundo}
+  \label{fig:boat1}
+\end{figure}
+
+\begin{figure}[H]
+  \includegraphics[center]{seg2.png}
+  \caption{Segmentação isolando o objeto}
+  \label{fig:frog1}
+\end{figure}
 
 \subsubsection{Solução Base PCA}
-Foi utilizada a Análise de Compenentes Principais com vários valores de k.
+A solução utilizando o PCA, deu resultados bons. Foi escrito um programa rodando em um laço com valores crescentes para o número de compenentes, começando com 15 componentes e aumentando em 16 em cada iteração. A execução do problema é lenta, mas nos trouxe resultados que puderam ser aproveitados. Por volta de 40 componentes, obtemos uma acurácia de 30\% tanto para o conjunto de treino como o conjunto de validação, o que foi o melhor resultado observado utilizando a regressão logística. Como obtemos uma acurácia semelhante entre os dois conjuntos, poderíamos dizer que não está ocorrendo \textit{overfitting}, diferente das soluções anteriores. Além disso, como diminuímos a dimensionalidade do modelo, obtemos uma solução computacionalmente mais leve.
+
+\begin{table}[H]
+\centering
+\caption{Tabela de acurácia por número de componentes}
+\label{my-label}
+\begin{tabular}{lllll}
+Componentes & Acurácia Treino & Acurácia Validação & & \\
+15  & 0.29 & 0.29 &  &  \\
+31  & 0.3  & 0.3  &  &  \\
+47  & 0.3  & 0.3  &  &  \\
+63  & 0.31 & 0.3  &  &  \\
+79  & 0.31 & 0.3  &  &  \\
+95  & 0.31 & 0.3  &  &  \\
+111 & 0.31 & 0.3  &  &  \\
+127 & 0.31 & 0.3  &  &  \\
+143 & 0.32 & 0.3  &  &  \\
+159 & 0.32 & 0.3  &  &  \\
+175 & 0.32 & 0.3  &  &  \\
+191 & 0.32 & 0.3  &  &  \\
+207 & 0.32 & 0.3  &  &  \\
+223 & 0.32 & 0.3  &  &  \\
+239 & 0.32 & 0.3  &  &  \\
+255 & 0.32 & 0.3  &  &  \\
+271 & 0.32 & 0.29 &  &  \\
+287 & 0.32 & 0.29 &  &  \\
+303 & 0.32 & 0.29 &  &  \\
+319 & 0.32 & 0.29 &  &  \\
+335 & 0.32 & 0.29 &  &  \\
+351 & 0.33 & 0.29 &  &  \\
+367 & 0.33 & 0.29 &  &  \\
+383 & 0.33 & 0.29 &  &  \\
+399 & 0.33 & 0.29 &  &  \\
+415 & 0.33 & 0.29 &  & 
+\end{tabular}
+\end{table}
 
 \subsection{Solução Base (Multinomial)}
-Para esta solução obtivemos também uma acurácia de 35\% para o conjunto de testes e 28\% para o de validação. Nota-se que o algoritmo de descida de gradiente estocástica não chegou a convergir e parou pelo número de iterações máximo ter sido atingido. Como para todos as soluções utlizando Regressão Linear obtivemos praticamente a mesma acurácia, poderíamos concluir que talvez este método não seja o mais adequado ao problema, ou que os dados da maneira que foram utilizados não era adequados para o modelo.
-
+Para esta solução, usando a regressão multinomial com PCA, obtivemos também uma acurácia de 30\% para o conjunto de testes e 30\% para o de validação. Um resultado semelhantes ao do One vs All, não obtendo uma melhora o resultado em comparação com a solução anterior.
 
 \section{Conclusões}
-Sobre os modelos baseados em gradientes, é notável a velocidade de convergência, principalmente no modelo estocástico que obtém erro baixo nas primeiras 5 iterações. Por outro lado, esses modelos necessitam de um fino ajuste da taxa de aprendizado.
-
-É importante apontar que o algoritmo com melhor desempenho final, baseado na meta-heurística de Algoritmos Genéticos, usualmente não é utilizadp para casos contínuos, mas obteve uma boa solução apesar do relativo alto custo de tempo. 
-
-Também é importante notar que os o modelo de GA obteve melhor desempenho para anos com maior número de exemplares do conjunto (próximos do ano 2000), enquanto os outros dois modelos obtiveram melhores desempenhos para anos com um menor número de dados. Esse fato deve ser investigado em trabalhos futuros, visando a encontrar o que levou ao baixo desempenho de modelos comumente aplicados na resolução do problema de Regressão Linear.  
-
+Sobre as soluções propostas, aquelas que se utilizaram de processamento de imagem não trouxeram melhoras para o modelo. No entanto, a solução utilizando PCA trouxe melhoras tanto para o resultado quanto para tempo de computação do modelo, demonstrando a vantagem de usar a redução de dimensionalidade por este método.
 
 \begin{thebibliography}{00}
 \bibitem{linearregression1} Montgomery, D.C., Peck, E.A. and Vining, G.G., 2015. Introduction to linear regression analysis. John Wiley \& Sons.
