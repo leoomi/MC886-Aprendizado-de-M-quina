@@ -31,30 +31,22 @@ jpedrorl@gmail.com}}
 
 \section{Introdução}
 
-
-Neste trabalho, temos o objetivo de explorar as técnicas de classificação vistas em aula para construir um sistema de reconhecimento de objetos para classificar imagens. Utilizando a Regressão Logística e Redes Neurais, iremos construir vários modelos para classificar imagens do conjunto de dados CIFAR-10.
-
-\section{Regressão Logística}
- 
-A regressão logística é um método utilizado em Aprendizado de Máquina para classificação. Este método utiliza a função sigmóide para predizer se uma entrada é de um determinado conjunto ou não, ou seja é classificação binária.
-Em casos de classificação de múltiplas classes, temos duas abordagens que foram utilizadas neste trabalho.
-A abordagem Um-Contra-Todos (\textit{One-vs-All}) calcula a probabilidade estimada de cada uma das classes contra todas outras, escolhendo aquela classe que maximiza esta probabilidade.
-A abordagem multinomial utiliza a função \textit{Softmax}, dando a entrada uma probabilidade para esta entrada uma probabilidade para todas as classes.
+Neste trabalho, tivemos que agrupar vários textos utilizando utilizando técnicas de Aprendizado não-supervisionado. Utilizando dados em formato \textit{bag-of-words} utilizamos algumas técnicas para tentar achar agrupamentos que fizessem algum sentido.
 
 \subsection{Soluções Propostas}
 
-\subsubsection{Solução Base (One vs All)}
-A primeira solução proposta foi aplicar a regressão linear usando a classificação de múltiplas classes Um-contra-todos sobre os níveis de cinza de cada pixel da imagem (foi utilizada a função rgb2gray do Scikit-image). Foi utilizado a implementação de Regressão Logística do Scikit-learn, sendo que o parâmetro \textit{multi\_class} foi setado para \textit{ovr}.
+\subsubsection{DBSCAN}
+Tentamos utilizar a técninca Density-Based Spatial Clustering of Applications with Noise (DBSCAN), já implementado na biblioteca Scikit Learn. Tentamos variar os parâmetros \texit{eps} e \textit{min\_samples}, no entanto, inicialmente, não conseguimos achar uma configuração que desse um resultado que parecia coerente, portanto desistimos de continuar experimentos com esta técnica. Possivelmente, a distribuição dos dados não favorecia o DBSCAN ou mesmo foi uma escolha infortúnia do parêmtros.
 
-\subsubsection{Solução Base Melhorada}
-Para analisar possíveis jeitos de melhorar o modelo, foram realizados três experimentos com o objetivo de melhorar a solução base. O primeiro foi utilizar um operador de bordas nas imagens e depois realizar a regressão logística. Foi utilizado o operador de Roberts implementado no Scikit-image. O segundo exprimento foi realizar uma segmentação da imagem e aplicar a regressão logística. A segmentação foi implementada utlizando a função de Otsu para obter uma limiar para cada imagem e criar uma máscara na imagem com o intuito de isolar o objeto do plano de fundo. O terceiro experimento foi utilizar a Análise de Compenentes Principais ou \textit{Principal Component Analysis} para reduzir a dimensionalidade do modelo, utilizando a implementação do Scikit-learn.
+\subsubsection{Hierarchical Clustering}
 
-\subsubsection{Solução Base (Multinomial)}
-Esta solução utiliza a Regressão Logística Multinomial, utilizando o melhor resultado entre os experimentos anteriores (níveis de cinza, operador de bordas, segmentação ou PCA). Para esta solução utilizamos a implementação de Regressão Logística do Scikit-learn, com o parâmetro \textit{multi\_class} setado para \'multinomial\' e o parâmetro solver setado para \'sag\' (\textit{Stochastic Gradient Descent}).
+
+\subsubsection{K-means}
+
 
 \subsection{Experimentos}
 \subsubsection{Modelos iniciais}
-Para o modelo base e de múltiplos graus de regressão logística, utilizamos de \textit{k-fold cross-validation}, com k=5 conjuntos, para verificarmos o funcionamento dos modelos. Para os experimentos, utilizamos estes conjuntos de dados para que pudéssemos ver a acurácia (utlizando a função \textit{score} do scikit-learn) do conjunto de treino e do conjunto de validação para verificarmos se houve \textit{overfitting} (ou \textit{underfitting}). Então calculamos a média aritmética dos resultados para o conjunto de testes e validação.
+utilizamos silhoutte blablabla
 
 \subsubsection{Solução Base (One vs All)}
 A solução base que utiliza como \textit{features} os níveis de cinza de todos os pixels da imagem obteve uma acurácia para o conjunto de testes de 35\% e para o de validação 28\%. A diferença de 7\% entre a acurárcia dos dois conjuntos indica que houve um pouco de \textit{overfitting} neste caso, e além disso, obtivemos um resultado pouco satisfatório.
