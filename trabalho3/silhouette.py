@@ -23,13 +23,13 @@ import numpy as np
 print("Reading data")
 data_path = "documents/data.csv"
 data_file = open(data_path)
-data = data_file.readlines()[:10000]
+data = data_file.readlines()
 data = [list(map(str.strip, i.split(","))) for i in data]
 data = [list(map(float, i)) for i in data]
 X = np.array(data)
 print("done")
 
-# range_n_clusters = [50, 100, 150, 200, 250]
+# range_n_clusters = [50, 100, 150, 200, 250, 300, 350, 400]
 
 for n_clusters in range(125, 176, 1):
     # Create a subplot with 1 row and 2 columns
