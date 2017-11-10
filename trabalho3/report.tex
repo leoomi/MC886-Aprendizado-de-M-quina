@@ -42,7 +42,7 @@ Tentamos utilizar a técninca Density-Based Spatial Clustering of Applications w
 Foi utilizado a implementação de Hierarchical clustering da biblioteca SciPy para agrupar os textos utlizando a função fclusterdata. Ela recebe como parâmetros os dados, uma limiar de distância máxima entre dois pontos, e um critério de comparação (neste caso foi utilizada a distância). Assim como o DBSCAN, o número de grupos não é uma das entradas para a função, e o algoritmo trata de achar estes grupos.
 
 \subsubsection{K-means}
-
+Foi utilizado o K-means implementado no Scikit learn. Neste caso, precisamos escolher um número de grupos e depois avaliar de alguma forma se a escolha foi boa, diferente das propostas anteriores.
 
 \subsection{Experimentos}
 Para todos os experimentos foi utilizado o Silhouette Coefficient como uma forma de avaliar a performance entre os métodos. 
@@ -72,7 +72,8 @@ Finalmente, para determinar o número de classes a ser utilizado pelo modelo, fo
   \label{fig:sil2}
 \end{figure}
 
-\subsubsection{Solução Base K-Means}
+\subsection {Resultados}
+\subsubsection{K-Means}
 Para analisar o modelo final do k-means, utilizou-se a mesma configuração que anteriormente, com máximo de 300 iterações e $k=151$. Com estes parêmetros foi obtido um coeficiente de 0.067. Para checar os resultados encontrados, escolheu-se um agrupamento aleatório e ordenou-se os pontos pertencentes a ele pela distância euclideana. De forma amostral, checamos alguns clusters e percebemos que o assunto geral dos documentos mais próximos foram:
 
 \begin{itemize}
@@ -94,13 +95,12 @@ No entanto, ao analisarmos melhor o resultado, foram criados mais 8500 grupos pa
 \item Cluster 31: Venda de revistas Playboy do ex colega de quarto
 \end{itemize}
 
-Em clusters que possuem múltiplos pontos, encontramos texto muito parecidos ou iguais, o que podemos até considerar como mérito desta solução. No entanto, como ela forma um número enorme de grupos, esta solução não possui muita generalidade.
+Em clusters que possuem múltiplos pontos, encontramos texto muito parecidos ou iguais. Ou seja, são agrupados textos apenas se extremamente similares, o que podemos até considerar como mérito desta solução. No entanto, como ela forma um número enorme de grupos, esta solução não possui muita generalidade.
 
 \section{PCA}
 Considerando a solução do K-means como a melhor, aplicamos o PCA nos dados. Rodamos alguns testes usando os parâmetros achados e verificamos o Silhoutte Coefficient obtido para alguns valores de dimensionalidade do PCA. Segue uma tabela com alguns dos valores obtidos:
 
 \begin{tabular}{ccc}
-  \toprule[1.5pt]
   \head{Nº Componentes} & \head{Silhoutte} \\
   \midrule
   1000 & -0.0408837480849 \\
@@ -108,7 +108,6 @@ Considerando a solução do K-means como a melhor, aplicamos o PCA nos dados. Ro
   250 & 0.0796884585275 \\
   100 & 0.15327313388 \\
   10 & 0.14025108712 \\
-  \bottomrule[1.5pt]
 \end{tabular}
 
 Podemos ver que valores maiores das dimensões estão diminuindo o desempenho da solução de acordo com o Silhoutte Coefficient. No entando, conforme o número de dimensões no PCA foi diminuido, chegamos a um valor maior que o original, sendo que nos valores testados, obtemos o melhor resultado com 100 dimensões. Checando alguns clusters como foi feito anteriormente, encontramos novamente grupos com assunstos em comum.
@@ -116,15 +115,11 @@ Podemos ver que valores maiores das dimensões estão diminuindo o desempenho da
 No mínimo, conseguimos ganhar em desempenho computacional pois estamos rodando K-Means com um número menor de dados, assim demorando menos para treinar ou predizer valores.
 
 \section{Conclusões}
-Não ter uma `resposta correta` torna muito diferente e difícil a resolução de problemas. Aprendizado não-supervisionado requere mesmo uma análise do tipo de dado ou alguma técnica ou heurística para auxiliar na resolução dos problemas. No caso de nossos experimentos do K-Means, conseguimos achar um resultado coerente usando uma técnica conhecida, o Elbow Method. Sendo que DBSCAN, que parece que uma solução até mais robusta, nos trouxe dificuldades para calibrar seus parâmetros.
+Não ter uma `resposta correta` torna muito diferente e difícil a resolução de problemas. Aprendizado não-supervisionado requere uma análise do tipo de dado ou alguma técnica ou heurística para auxiliar na resolução dos problemas. No caso de nossos experimentos do K-Means, conseguimos achar um resultado coerente usando uma técnica conhecida, o Elbow Method. Sendo que DBSCAN, que parece que uma solução até mais robusta, nos trouxe dificuldades para calibrar seus parâmetros.
 
 Não ter uma resposta exata para o problema também traz dificuldade para verificar o desempenho. Utilizamos o Silhoutte Coefficient e uma pequena checagem de alguns casos, mostrando alguns resultados bons.
 
 \begin{thebibliography}{00}
-\bibitem{linearregression1} Montgomery, D.C., Peck, E.A. and Vining, G.G., 2015. Introduction to linear regression analysis. John Wiley \& Sons.
-\bibitem{gendreau2010handbook} Gendreau, M. and Potvin, J.Y., 2010. Handbook of metaheuristics (Vol. 2). New York: Springer.
-\bibitem{continousgenetics} Haupt, R.L. and Haupt, S.E., 2004. Practical genetic algorithms. John Wiley \& Sons.
-\bibitem{continuousgenetics2} Djurisic, A.B., Elazar, J.M. and Rakic, A.D., 1997. Genetic algorithms for continuous optimization problems-a concept of parameter-space size adjustment. Journal of Physics A: Mathematical and General, 30(22), p.7849.
 \end{thebibliography}
 
 \end{document}
