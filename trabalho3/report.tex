@@ -36,7 +36,7 @@ Neste trabalho, tivemos que agrupar vários textos utilizando utilizando técnic
 \subsection{Soluções Propostas}
 
 \subsubsection{DBSCAN}
-Tentamos utilizar a técninca Density-Based Spatial Clustering of Applications with Noise (DBSCAN), já implementado na biblioteca Scikit Learn. Parecia uma boa escolha já que o algoritmo agrupa pontos próximos um dos outros, sem precisar receber como parâmetro o número de grupos (que é um dos resultados que gostaríamos). Tentamos variar os parâmetros \texit{eps} e \textit{min\_samples}, no entanto, inicialmente, não conseguimos achar uma configuração que desse um resultado que parecia coerente, portanto desistimos de continuar experimentos com esta técnica. Possivelmente, a distribuição dos dados não favorecia o DBSCAN ou mesmo foi uma escolha infortúnia do parêmtros.
+Tentamos utilizar a técninca Density-Based Spatial Clustering of Applications with Noise (DBSCAN), já implementado na biblioteca Scikit Learn. Parecia uma boa escolha já que o algoritmo agrupa pontos próximos um dos outros, sem precisar receber como parâmetro o número de grupos (que é um dos resultados que gostaríamos). Tentamos variar os parâmetros \texit{eps} e \textit{min\_samples}, no entanto, inicialmente, não conseguimos achar uma configuração que desse um resultado que parecia coerente, portanto desistimos de continuar experimentos com esta técnica. Possivelmente, a distribuição dos dados não favorecia o DBSCAN ou pode ter sido uma escolha infortúnia do parêmtros.
 
 \subsubsection{Hierarchical Clustering}
 Foi utilizado a implementação de Hierarchical clustering da biblioteca SciPy para agrupar os textos utlizando a função fclusterdata. Ela recebe como parâmetros os dados, uma limiar de distância máxima entre dois pontos, e um critério de comparação (neste caso foi utilizada a distância). Assim como o DBSCAN, o número de grupos não é uma das entradas para a função, e o algoritmo trata de achar estes grupos.
@@ -87,11 +87,11 @@ Para analisar o modelo final do k-means, utilizou-se a mesma configuração que 
 
 \subsubsection{Hierarchical Clustering}
 Foram `chutados`  alguns valores iniciais para o limiar do algoritmo. Assim, percebemos que valores menores que 1 estavam tendo um Silhoutte Coefficient melhor, portanto foi utilizado um laço para achar valores com melhores resultados. Foi utilizado metade do conjunto de dados por causa do tempo de execução longo. O coeficiente achado foi de 0.055 para o limiar de 0.7, assim, este valor foi utilizado.
-No entanto, ao analisarmos melhor o resultado, foram criados mais 8500 grupos para as 9962 entradas de dados, ou seja, muitos dos grupos só possuiam um ponto. Analisando alguns dos clusters que tinham multiplos pontos, achamos coisas coerentes:
+No entanto, ao analisarmos melhor o resultado, foram criados mais 8500 grupos para as 9962 entradas de dados, ou seja, muitos dos grupos só possuiam um ponto. Analisando alguns dos clusters que tinham multiplos pontos, achamos grupos coerentes:
 
 \begin{itemize}
 \item Cluster 2: Placares e pontuações da MLB
-\item Cluster 61: Accounts of Anti-Armenian Human Right Violations in Azerbaijan
+\item Cluster 61: \textit{Accounts of Anti-Armenian Human Right Violations in Azerbaijan}
 \item Cluster 31: Venda de revistas Playboy do ex colega de quarto
 \end{itemize}
 
@@ -110,14 +110,16 @@ Considerando a solução do K-means como a melhor, aplicamos o PCA nos dados. Ro
   10 & 0.14025108712 \\
 \end{tabular}
 
-Podemos ver que valores maiores das dimensões estão diminuindo o desempenho da solução de acordo com o Silhoutte Coefficient. No entando, conforme o número de dimensões no PCA foi diminuido, chegamos a um valor maior que o original, sendo que nos valores testados, obtemos o melhor resultado com 100 dimensões. Checando alguns clusters como foi feito anteriormente, encontramos novamente grupos com assunstos em comum.
+Podemos ver que valores maiores das dimensões estão diminuindo o desempenho da solução de acordo com o Silhoutte Coefficient. No entando, conforme o número de dimensões no PCA foi diminuido, chegamos a um valor maior que o original, sendo que nos valores testados, obtemos o melhor resultado com 100 dimensões.
 
-No mínimo, conseguimos ganhar em desempenho computacional pois estamos rodando K-Means com um número menor de dados, assim demorando menos para treinar ou predizer valores.
+A vanatagem de utilizar o PCA neste caso foi que, conseguimos ganhar em desempenho computacional pois estamos rodando K-Means com um número menor de dados, assim diminuindo o tempo de execução e até melhoramos o desempenho como visto pelo aumento do coeficiente.
 
 \section{Conclusões}
-Não ter uma `resposta correta` torna muito diferente e difícil a resolução de problemas. Aprendizado não-supervisionado requere uma análise do tipo de dado ou alguma técnica ou heurística para auxiliar na resolução dos problemas. No caso de nossos experimentos do K-Means, conseguimos achar um resultado coerente usando uma técnica conhecida, o Elbow Method. Sendo que DBSCAN, que parece que uma solução até mais robusta, nos trouxe dificuldades para calibrar seus parâmetros.
+Não ter uma resposta correta torna muito diferente e difícil a resolução de problemas. Aprendizado não-supervisionado requere uma análise do tipo de dado ou alguma técnica ou heurística para auxiliar na resolução dos problemas. No caso de nossos experimentos do K-Means, conseguimos achar um resultado coerente usando uma técnica conhecida, o Elbow Method. Sendo que DBSCAN, que parece que uma solução até mais robusta, nos trouxe dificuldades para calibrar seus parâmetros.
 
 Não ter uma resposta exata para o problema também traz dificuldade para verificar o desempenho. Utilizamos o Silhoutte Coefficient e uma pequena checagem de alguns casos, mostrando alguns resultados bons.
+
+Ainda assim, e nossos experimentos conseguimos criar modelos relativamente simples que conseguiram servir algum propósito. O K-means conseguiu de fato agrupar de uma manera satisfatória em vário grupos, enquanto o Hierarchical Clustering, apesar de ser muito específico, consegue ter algum tipo de propósito. Além disso, vimos como o PCA pode melhorar um modelo, não só diminuindo o tempo de execução, como melhorando os resultados.
 
 \begin{thebibliography}{00}
 \end{thebibliography}
