@@ -20,15 +20,17 @@ data = [list(map(float, i)) for i in data]
 X = np.array(data)
 print("done")
 
-print("Starting PCA")
-pca = PCA(n_components=1000, whiten=True)
-pca.fit(data)
-data = pca.transform(data)
-
-print(data.shape)
-print("PCA finished")
-
-clusterer = KMeans(n_clusters=151, random_state=10)
-cluster_labels = clusterer.fit_predict(X)
-silhouette_avg = silhouette_score(X, cluster_labels)
-print("Score: ", silhouette_avg)
+for i in [500, 250, 100, 10]:
+    print("Starting PCA")
+    pca = PCA(n_components=i, whiten=True)
+    pca.fit(data)
+    data = pca.transform(data)
+    
+    print(data.shape)
+    print("PCA finished")
+    
+    clusterer = KMeans(n_clusters=151, random_state=10)
+    cluster_labels = clusterer.fit_predict(X)
+    silhouette_avg = silhouette_score(X, cluster_labels)
+    print(i)
+    print("Score: ", silhouette_avg)

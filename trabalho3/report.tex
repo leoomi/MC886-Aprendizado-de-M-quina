@@ -45,10 +45,36 @@ Foi utilizado a implementação de Hierarchical clustering da biblioteca SciPy p
 
 
 \subsection{Experimentos}
-Para
+Para todos os experimentos foi utilizado o Silhouette Coefficient como uma forma de avaliar a performance entre os métodos. 
 
-\subsubsection{Solução Base (One vs All)}
-A solução base que utiliza como \textit{features} os níveis de cinza de todos os pixels da imagem obteve uma acurácia para o conjunto de testes de 35\% e para o de validação 28\%. A diferença de 7\% entre a acurárcia dos dois conjuntos indica que houve um pouco de \textit{overfitting} neste caso, e além disso, obtivemos um resultado pouco satisfatório.
+\subsubsection{Modelos iniciais}
+Para analisar o número de grupos presentes no problema, utilizamos como modelo base o Elbow Method, variando esse número no intervalo [10, 1000] com passo 10 encontramos o gráfico disposto na figura \ref{fig:elbow}. 
+
+\begin{figure}[H]
+  \includegraphics[scale=0.4, center]{elbow.png}
+  \caption{Número de Clusters x Erro médio}
+  \label{fig:elbow}
+\end{figure}
+
+Utilizando o modelo de k-médias com 3 reinícios, 10 iterações e inicialização aleatória \textit{k-means++}. Com base no gráfico gerado, escolhemos o range de classes [50, 400] a ser submetido ao método de silhueta. Utilizando passo 50 encontramos o gráfico da figura \ref{fig:sil1}, que representa a pontuação para tais valores de k.
+
+\begin{figure}[H]
+  \includegraphics[scale=0.4, center]{silhouette1.png}
+  \caption{Silhueta no intervalo [50, 400] com passo 50}
+  \label{fig:sil1}
+\end{figure}
+
+Finalmente, para determinar o número de classes a ser utilizado pelo modelo, foi percorrido o intervalo [125, 175] e desenhado o gráfico da pontuação encontrada pelo método de silhueta, representado na figura \ref{fig:sil2}. Dessa forma, foram emscolhidas 151 clusters para o problema. 
+
+\begin{figure}[H]
+  \includegraphics[scale=0.4, center]{silhouette2.png}
+  \caption{Silhueta no intervalo [125, 175]}
+  \label{fig:sil2}
+\end{figure}
+
+
+\subsubsection{Hierarchical Clustering}
+Foram `chutados`  alguns valores iniciais para o limiar do algoritmo. Assim, percebemos que valores menores que 1 estavam tendo um Silhoutte Coefficient melhor, portanto foi utilizado um laço para achar valores com melhores resultados. O coeficiente achado foi de 0.055 para o limiar de 0.7, assim, este valor foi utilizado.
 
 \subsubsection{Solução Base Melhorada}
 Com o intuito de de melhorar a solução base, foram feitos experimentos utilizando funções de borda e de segmentação. A solução de função de borda trouxe resultados na média muito próximos à solução original. Poderíamos concluir à partir deste resultado, que a extração de bordas da imagem não extrai dados que sejam relevantes para a melhora do modelo, e é algo que a própria regressão logística sobre os valores de cinza da imagem original acaba considerando de certa maneira.
