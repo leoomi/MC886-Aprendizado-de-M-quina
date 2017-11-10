@@ -36,17 +36,16 @@ Neste trabalho, tivemos que agrupar vários textos utilizando utilizando técnic
 \subsection{Soluções Propostas}
 
 \subsubsection{DBSCAN}
-Tentamos utilizar a técninca Density-Based Spatial Clustering of Applications with Noise (DBSCAN), já implementado na biblioteca Scikit Learn. Tentamos variar os parâmetros \texit{eps} e \textit{min\_samples}, no entanto, inicialmente, não conseguimos achar uma configuração que desse um resultado que parecia coerente, portanto desistimos de continuar experimentos com esta técnica. Possivelmente, a distribuição dos dados não favorecia o DBSCAN ou mesmo foi uma escolha infortúnia do parêmtros.
+Tentamos utilizar a técninca Density-Based Spatial Clustering of Applications with Noise (DBSCAN), já implementado na biblioteca Scikit Learn. Parecia uma boa escolha já que o algoritmo agrupa pontos próximos um dos outros, sem precisar receber como parâmetro o número de grupos (que é um dos resultados que gostaríamos). Tentamos variar os parâmetros \texit{eps} e \textit{min\_samples}, no entanto, inicialmente, não conseguimos achar uma configuração que desse um resultado que parecia coerente, portanto desistimos de continuar experimentos com esta técnica. Possivelmente, a distribuição dos dados não favorecia o DBSCAN ou mesmo foi uma escolha infortúnia do parêmtros.
 
 \subsubsection{Hierarchical Clustering}
-
+Foi utilizado a implementação de Hierarchical clustering da biblioteca SciPy para agrupar os textos utlizando a função fclusterdata. Ela recebe como parâmetros os dados, uma limiar de distância máxima entre dois pontos, e um critério de comparação (neste caso foi utilizada a distância). Assim como o DBSCAN, o número de grupos não é uma das entradas para a função, e o algoritmo trata de achar estes grupos.
 
 \subsubsection{K-means}
 
 
 \subsection{Experimentos}
-\subsubsection{Modelos iniciais}
-utilizamos silhoutte blablabla
+Para
 
 \subsubsection{Solução Base (One vs All)}
 A solução base que utiliza como \textit{features} os níveis de cinza de todos os pixels da imagem obteve uma acurácia para o conjunto de testes de 35\% e para o de validação 28\%. A diferença de 7\% entre a acurárcia dos dois conjuntos indica que houve um pouco de \textit{overfitting} neste caso, e além disso, obtivemos um resultado pouco satisfatório.
