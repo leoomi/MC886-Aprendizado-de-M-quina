@@ -70,32 +70,17 @@ Finalmente, para determinar o número de classes a ser utilizado pelo modelo, fo
   \label{fig:sil2}
 \end{figure}
 
+\subsubsection{Solução Base K-Means}
+Para analisar o modelo final do k-means, utilizou-se a mesma configuração que anteriormente, com máximo de 300 iterações e $k=151$. Para checar os resultados encontrados, escolheu-se um agrupamento aleatório e ordenou-se os pontos pertencentes a ele pela distância euclideana. De forma amostral, checamos alguns clusters e percebemos que o assunto geral dos documentos mais próximos foram:
 
-\subsubsection{Solução Base (One vs All)}
-A solução base que utiliza como \textit{features} os níveis de cinza de todos os pixels da imagem obteve uma acurácia para o conjunto de testes de 35\% e para o de validação 28\%. A diferença de 7\% entre a acurárcia dos dois conjuntos indica que houve um pouco de \textit{overfitting} neste caso, e além disso, obtivemos um resultado pouco satisfatório.
-
-\subsubsection{Solução Base Melhorada}
-Com o intuito de de melhorar a solução base, foram feitos experimentos utilizando funções de borda e de segmentação. A solução de função de borda trouxe resultados na média muito próximos à solução original. Poderíamos concluir à partir deste resultado, que a extração de bordas da imagem não extrai dados que sejam relevantes para a melhora do modelo, e é algo que a própria regressão logística sobre os valores de cinza da imagem original acaba considerando de certa maneira.
-
-\begin{figure}[H]
-  \includegraphics[center]{bor.png}
-  \caption{Operador de borda}
-  \label{fig:frog1}
-\end{figure}
-
-A segunda solução utilizando a segmentação obteve resultados piores de acurácia. 30\% para o conjunto de testes e 21\% no conjunto de validação. A causa desta queda pode ser atribuído à técnica simples da segmentação, já que em alguns casos a máscara pode extrair o objeto da imagem e em outros o plano de fundo, dependendo dos níveis de cinza do objeto serem maiores ou menores que o do fundo. Portanto, não obtivemos melhoras significativas com estas soluções, portanto iremos utlizar os níveis de cinza como na primeira solução proposta para as próximas soluções do trabalho.
-
-\begin{figure}[H]
-  \includegraphics[center]{seg1.png}
-  \caption{Segmentação isolando o plano de fundo}
-  \label{fig:boat1}
-\end{figure}
-
-\begin{figure}[H]
-  \includegraphics[center]{seg2.png}
-  \caption{Segmentação isolando o objeto}
-  \label{fig:frog1}
-\end{figure}
+\begin{itemize}
+\item Cluster 0: pedidos de ajuda e sugestões/dicas em diversos tópicos (carros, hardware
+\item Cluster 17: discussões relacionadas a \textit{Hockey}
+\item Cluster 31: 3 grupos principais: carros, esportes e eletrônicos
+\item Cluster 42: Uma longa discussão sobre o mesmo assunto: \textit{Who's next? Mormons and Jews?}
+\item Cluster 67: Questões relacionadas a hardware/software da Microsoft/Apple
+\item Cluster 123: Alguns documentos são relacionados a vendas, outros relacionados a direção de veículos
+\end{itemize}
 
 \subsubsection{Solução Base PCA}
 A solução utilizando o PCA, deu resultados bons. Foi escrito um programa rodando em um laço com valores crescentes para o número de compenentes, começando com 15 componentes e aumentando em 16 em cada iteração. A execução do problema é lenta, mas nos trouxe resultados que puderam ser aproveitados. Por volta de 40 componentes, obtemos uma acurácia de 30\% tanto para o conjunto de treino como o conjunto de validação, o que foi o melhor resultado observado utilizando a regressão logística. Como obtemos uma acurácia semelhante entre os dois conjuntos, poderíamos dizer que não está ocorrendo \textit{overfitting}, diferente das soluções anteriores. Além disso, como diminuímos a dimensionalidade do modelo, obtemos uma solução computacionalmente mais leve.

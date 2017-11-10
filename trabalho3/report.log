@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.8.27)  9 NOV 2017 22:49
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.8.27)  10 NOV 2017 00:05
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -832,11 +832,7 @@ File: ts1enc.dfu 2015/12/03 v1.1r UTF-8 support for inputenc
    defining Unicode char U+2026 (decimal 8230)
    defining Unicode char U+2122 (decimal 8482)
    defining Unicode char U+2423 (decimal 9251)
-)) (./report.aux
-
-LaTeX Warning: Label `fig:frog1' multiply defined.
-
-)
+)) (./report.aux)
 \openout1 = `report.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 16.
@@ -853,7 +849,8 @@ LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 16.
 LaTeX Font Info:    ... okay on input line 16.
 LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 16.
 LaTeX Font Info:    Try loading font information for TS1+cmr on input line 16.
- (/usr/share/texlive/texmf-dist/tex/latex/base/ts1cmr.fd
+
+(/usr/share/texlive/texmf-dist/tex/latex/base/ts1cmr.fd
 File: ts1cmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    ... okay on input line 16.
@@ -937,94 +934,81 @@ File: silhouette2.png Graphic file (type png)
  <use silhouette2.png>
 Package pdftex.def Info: silhouette2.png used on input line 68.
 (pdftex.def)             Requested size: 240.89572pt x 148.95386pt.
- [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}
-
-
- <./elbow.png (PNG copy)> <./silhouette1.png (PNG copy)> <./silhouette2.png (PN
-G copy)>]
-<bor.png, id=11, 32.12pt x 32.12pt>
-File: bor.png Graphic file (type png)
- <use bor.png>
-Package pdftex.def Info: bor.png used on input line 81.
-(pdftex.def)             Requested size: 32.1199pt x 32.1199pt.
-
-<seg1.png, id=12, 32.12pt x 32.12pt>
-File: seg1.png Graphic file (type png)
- <use seg1.png>
-Package pdftex.def Info: seg1.png used on input line 89.
-(pdftex.def)             Requested size: 32.1199pt x 32.1199pt.
-
-<seg2.png, id=13, 32.12pt x 32.12pt>
-File: seg2.png Graphic file (type png)
- <use seg2.png>
-Package pdftex.def Info: seg2.png used on input line 95.
-(pdftex.def)             Requested size: 32.1199pt x 32.1199pt.
-LaTeX Font Info:    Try loading font information for U+msa on input line 107.
+LaTeX Font Info:    Try loading font information for U+msa on input line 74.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 107.
+LaTeX Font Info:    Try loading font information for U+msb on input line 74.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-)
-Underfull \vbox (badness 2310) has occurred while \output is active []
+) [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}
 
 
-Underfull \hbox (badness 3281) in paragraph at lines 143--144
+ <./elbow.png (PNG copy)> <./silhouette1.png (PNG copy)> <./silhouette2.png (PN
+G copy)>]
+Underfull \hbox (badness 1728) in paragraph at lines 79--80
+[]\OT1/ptm/m/n/10 Cluster 31: 3 gru-pos prin-ci-pais: car-ros, es-portes e
+ []
+
+
+Underfull \hbox (badness 3281) in paragraph at lines 128--129
 []\OT1/ptm/m/n/10 Redes Neu-rais agru-pam m[]etodos de apren-dizado de
  []
 
 
-Underfull \hbox (badness 4713) in paragraph at lines 147--148
+Underfull \hbox (badness 4713) in paragraph at lines 132--133
 []\OT1/ptm/m/n/10 Existem di-ver-sas opera[][]oes que po-dem sub-sti-tuir a
  []
 
-[2 <./bor.png (PNG copy)> <./seg1.png (PNG copy)> <./seg2.png (PNG copy)>]
-<dense.png, id=19, 602.25pt x 372.39125pt>
+<dense.png, id=13, 602.25pt x 372.39125pt>
 File: dense.png Graphic file (type png)
  <use dense.png>
-Package pdftex.def Info: dense.png used on input line 162.
+Package pdftex.def Info: dense.png used on input line 147.
 (pdftex.def)             Requested size: 240.89572pt x 148.95386pt.
 
-<conv.png, id=20, 602.25pt x 372.39125pt>
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<conv.png, id=14, 602.25pt x 372.39125pt>
 File: conv.png Graphic file (type png)
  <use conv.png>
-Package pdftex.def Info: conv.png used on input line 168.
+Package pdftex.def Info: conv.png used on input line 153.
 (pdftex.def)             Requested size: 240.89572pt x 148.95386pt.
 
-<dense_conv.png, id=21, 602.25pt x 372.39125pt>
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<dense_conv.png, id=15, 602.25pt x 372.39125pt>
 File: dense_conv.png Graphic file (type png)
  <use dense_conv.png>
-Package pdftex.def Info: dense_conv.png used on input line 174.
+Package pdftex.def Info: dense_conv.png used on input line 159.
 (pdftex.def)             Requested size: 240.89572pt x 148.95386pt.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<conv_dense.png, id=22, 602.25pt x 372.39125pt>
+<conv_dense.png, id=16, 602.25pt x 372.39125pt>
 File: conv_dense.png Graphic file (type png)
  <use conv_dense.png>
-Package pdftex.def Info: conv_dense.png used on input line 180.
+Package pdftex.def Info: conv_dense.png used on input line 165.
 (pdftex.def)             Requested size: 240.89572pt x 148.95386pt.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 
-Underfull \hbox (badness 2057) in paragraph at lines 194--195
+Underfull \hbox (badness 2057) in paragraph at lines 179--180
 \OT1/ptm/m/it/10 (3, 3)) & Dense(512) \OT1/ptm/m/n/10 uti-lizando o con-junto d
 e testes,
  []
 
-
-Underfull \hbox (badness 2343) in paragraph at lines 203--204
+[2]
+Underfull \hbox (badness 2343) in paragraph at lines 188--189
 []\OT1/ptm/m/n/10 Com rela[][]ao a mod-e-lagem uti-lizando Re-des neu-rais,
  []
 
-[3 <./dense.png (PNG copy)> <./conv.png (PNG copy)> <./dense_conv.png (PNG copy
-)> <./conv_dense.png (PNG copy)>]
 
 ** Conference Paper **
 Before submitting the final camera ready copy, remember to:
@@ -1036,31 +1020,26 @@ Before submitting the final camera ready copy, remember to:
  uses only Type 1 fonts and that every step in the generation
  process uses the appropriate paper size.
 
-[4
-
-] (./report.aux)
-
-LaTeX Warning: There were multiply-defined labels.
-
- ) 
+[3 <./dense.png (PNG copy)> <./conv.png (PNG copy)> <./dense_conv.png (PNG copy
+)> <./conv_dense.png (PNG copy)>] (./report.aux) ) 
 Here is how much of TeX's memory you used:
- 6691 strings out of 493029
- 98688 string characters out of 6136234
- 197564 words of memory out of 5000000
- 10078 multiletter control sequences out of 15000+600000
+ 6673 strings out of 493029
+ 98486 string characters out of 6136234
+ 200508 words of memory out of 5000000
+ 10063 multiletter control sequences out of 15000+600000
  37327 words of font info for 82 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  38i,11n,35p,813b,287s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texliv
-e/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/
-fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/t
-ype1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/
-utmri8a.pfb>
-Output written on report.pdf (4 pages, 184126 bytes).
+{/usr/share/texlive/texmf-dis
+t/fonts/enc/dvips/base/8r.enc}</usr/share/texlive/texmf-dist/fonts/type1/public
+/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfo
+nts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/
+cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr
+/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on report.pdf (3 pages, 179437 bytes).
 PDF statistics:
- 48 PDF objects out of 1000 (max. 8388607)
- 26 compressed objects within 1 object stream
+ 42 PDF objects out of 1000 (max. 8388607)
+ 24 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 51 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 36 words of extra memory for PDF output out of 10000 (max. 10000000)
 
