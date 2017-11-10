@@ -72,137 +72,53 @@ Finalmente, para determinar o número de classes a ser utilizado pelo modelo, fo
   \label{fig:sil2}
 \end{figure}
 
+\subsubsection{Solução Base K-Means}
+Para analisar o modelo final do k-means, utilizou-se a mesma configuração que anteriormente, com máximo de 300 iterações e $k=151$. Com estes parêmetros foi obtido um coeficiente de 0.067. Para checar os resultados encontrados, escolheu-se um agrupamento aleatório e ordenou-se os pontos pertencentes a ele pela distância euclideana. De forma amostral, checamos alguns clusters e percebemos que o assunto geral dos documentos mais próximos foram:
+
+\begin{itemize}
+\item Cluster 0: pedidos de ajuda e sugestões/dicas em diversos tópicos (carros, hardware
+\item Cluster 17: discussões relacionadas a \textit{Hockey}
+\item Cluster 31: 3 grupos principais: carros, esportes e eletrônicos
+\item Cluster 42: Uma longa discussão sobre o mesmo assunto: \textit{Who's next? Mormons and Jews?}
+\item Cluster 67: Questões relacionadas a hardware/software da Microsoft/Apple
+\item Cluster 123: Alguns documentos são relacionados a vendas, outros relacionados a direção de veículos
+\end{itemize}
 
 \subsubsection{Hierarchical Clustering}
-Foram `chutados`  alguns valores iniciais para o limiar do algoritmo. Assim, percebemos que valores menores que 1 estavam tendo um Silhoutte Coefficient melhor, portanto foi utilizado um laço para achar valores com melhores resultados. O coeficiente achado foi de 0.055 para o limiar de 0.7, assim, este valor foi utilizado.
+Foram `chutados`  alguns valores iniciais para o limiar do algoritmo. Assim, percebemos que valores menores que 1 estavam tendo um Silhoutte Coefficient melhor, portanto foi utilizado um laço para achar valores com melhores resultados. Foi utilizado metade do conjunto de dados por causa do tempo de execução longo. O coeficiente achado foi de 0.055 para o limiar de 0.7, assim, este valor foi utilizado.
+No entanto, ao analisarmos melhor o resultado, foram criados mais 8500 grupos para as 9962 entradas de dados, ou seja, muitos dos grupos só possuiam um ponto. Analisando alguns dos clusters que tinham multiplos pontos, achamos coisas coerentes:
 
-\subsubsection{Solução Base Melhorada}
-Com o intuito de de melhorar a solução base, foram feitos experimentos utilizando funções de borda e de segmentação. A solução de função de borda trouxe resultados na média muito próximos à solução original. Poderíamos concluir à partir deste resultado, que a extração de bordas da imagem não extrai dados que sejam relevantes para a melhora do modelo, e é algo que a própria regressão logística sobre os valores de cinza da imagem original acaba considerando de certa maneira.
+\begin{itemize}
+\item Cluster 2: Placares e pontuações da MLB
+\item Cluster 61: Accounts of Anti-Armenian Human Right Violations in Azerbaijan
+\item Cluster 31: Venda de revistas Playboy do ex colega de quarto
+\end{itemize}
 
-\begin{figure}[H]
-  \includegraphics[center]{bor.png}
-  \caption{Operador de borda}
-  \label{fig:frog1}
-\end{figure}
+Em clusters que possuem múltiplos pontos, encontramos texto muito parecidos ou iguais, o que podemos até considerar como mérito desta solução. No entanto, como ela forma um número enorme de grupos, esta solução não possui muita generalidade.
 
-A segunda solução utilizando a segmentação obteve resultados piores de acurácia. 30\% para o conjunto de testes e 21\% no conjunto de validação. A causa desta queda pode ser atribuído à técnica simples da segmentação, já que em alguns casos a máscara pode extrair o objeto da imagem e em outros o plano de fundo, dependendo dos níveis de cinza do objeto serem maiores ou menores que o do fundo. Portanto, não obtivemos melhoras significativas com estas soluções, portanto iremos utlizar os níveis de cinza como na primeira solução proposta para as próximas soluções do trabalho.
+\section{PCA}
+Considerando a solução do K-means como a melhor, aplicamos o PCA nos dados. Rodamos alguns testes usando os parâmetros achados e verificamos o Silhoutte Coefficient obtido para alguns valores de dimensionalidade do PCA. Segue uma tabela com alguns dos valores obtidos:
 
-\begin{figure}[H]
-  \includegraphics[center]{seg1.png}
-  \caption{Segmentação isolando o plano de fundo}
-  \label{fig:boat1}
-\end{figure}
-
-\begin{figure}[H]
-  \includegraphics[center]{seg2.png}
-  \caption{Segmentação isolando o objeto}
-  \label{fig:frog1}
-\end{figure}
-
-\subsubsection{Solução Base PCA}
-A solução utilizando o PCA, deu resultados bons. Foi escrito um programa rodando em um laço com valores crescentes para o número de compenentes, começando com 15 componentes e aumentando em 16 em cada iteração. A execução do problema é lenta, mas nos trouxe resultados que puderam ser aproveitados. Por volta de 40 componentes, obtemos uma acurácia de 30\% tanto para o conjunto de treino como o conjunto de validação, o que foi o melhor resultado observado utilizando a regressão logística. Como obtemos uma acurácia semelhante entre os dois conjuntos, poderíamos dizer que não está ocorrendo \textit{overfitting}, diferente das soluções anteriores. Além disso, como diminuímos a dimensionalidade do modelo, obtemos uma solução computacionalmente mais leve.
-
-\begin{table}[H]
-\centering
-\caption{Tabela de acurácia por número de componentes}
-\label{my-label}
-\begin{tabular}{lllll}
-Componentes & Acurácia Treino & Acurácia Validação & & \\
-15  & 0.29 & 0.29 &  &  \\
-31  & 0.3  & 0.3  &  &  \\
-47  & 0.3  & 0.3  &  &  \\
-63  & 0.31 & 0.3  &  &  \\
-79  & 0.31 & 0.3  &  &  \\
-95  & 0.31 & 0.3  &  &  \\
-111 & 0.31 & 0.3  &  &  \\
-127 & 0.31 & 0.3  &  &  \\
-143 & 0.32 & 0.3  &  &  \\
-159 & 0.32 & 0.3  &  &  \\
-175 & 0.32 & 0.3  &  &  \\
-191 & 0.32 & 0.3  &  &  \\
-207 & 0.32 & 0.3  &  &  \\
-223 & 0.32 & 0.3  &  &  \\
-239 & 0.32 & 0.3  &  &  \\
-255 & 0.32 & 0.3  &  &  \\
-271 & 0.32 & 0.29 &  &  \\
-287 & 0.32 & 0.29 &  &  \\
-303 & 0.32 & 0.29 &  &  \\
-319 & 0.32 & 0.29 &  &  \\
-335 & 0.32 & 0.29 &  &  \\
-351 & 0.33 & 0.29 &  &  \\
-367 & 0.33 & 0.29 &  &  \\
-383 & 0.33 & 0.29 &  &  \\
-399 & 0.33 & 0.29 &  &  \\
-415 & 0.33 & 0.29 &  & 
+\begin{tabular}{ccc}
+  \toprule[1.5pt]
+  \head{Nº Componentes} & \head{Silhoutte} \\
+  \midrule
+  1000 & -0.0408837480849 \\
+  500 & 0.0116988599587 \\
+  250 & 0.0796884585275 \\
+  100 & 0.15327313388 \\
+  10 & 0.14025108712 \\
+  \bottomrule[1.5pt]
 \end{tabular}
-\end{table}
 
-\subsubsection{Solução Base (Multinomial)}
-Para esta solução, usando a regressão multinomial com PCA, obtivemos também uma acurácia de 30\% para o conjunto de testes e 30\% para o de validação. Um resultado semelhantes ao do One vs All, não obtendo uma melhora o resultado em comparação com a solução anterior.
+Podemos ver que valores maiores das dimensões estão diminuindo o desempenho da solução de acordo com o Silhoutte Coefficient. No entando, conforme o número de dimensões no PCA foi diminuido, chegamos a um valor maior que o original, sendo que nos valores testados, obtemos o melhor resultado com 100 dimensões. Checando alguns clusters como foi feito anteriormente, encontramos novamente grupos com assunstos em comum.
 
-
-\section{Redes Neurais}
-Redes Neurais agrupam métodos de aprendizado de máquina que foram originalmente baseados no comportamento do cérebro, onde neurônios fazem operações simples e a complexidade do sistema está na iteração entre os diversos neurônios. Apesar de os conceitos aplicados atualmente estarem distantes dos modelos cerebrais, Redes Neurais estão no Estado da Arte na solução de diversos problemas complexos. 
-
-Uma Rede Neural é dividida em 3 camadas, cada uma composta por uma matriz de pesos e uma função de ativação: \textit{Input Layer}, \textit{Hidden Layer} e \textit{Output Layer}. A entrada é multiplicada pela primeira camada e submetida a função de ativação, onde sua saída é multiplicada pela matriz subsequente e assim por diante. 
-
-Existem diversas operações que podem substituir a multiplicação de matrizes, como uma operação Convolucional 2D (utilizado particularmente em problemas relacionados a Visão Computacional) em que filtros são aplicados de maneira convolucional a entrada. 
-
-\subsubsection{Soluções Propostas}
-Para construir diversos modelos, consideramos os operadores \textit{Dense($X$)} que realiza a operação $output = dot(input, kernel) + bias$ utilizando $X$ neurônios; \textit{Conv2D(32, (3, 3))}, que utiliza 32 filtros de aprendizado de tamanho $3x3$. Como operador de ativação, foi considerado o operador ReLU (\textit{Rectified Linear Unit}) que aplica a operação $f(x) = max(x, 0)$. 
-
-Na camada de entrada e de saída foram utilizados os operadores \textit{Dense(512} e \textit{Dense(10)}, respectivamente. A saída foi ligada a um operador \textit{softmax}, a fim de classificar as imagens nas 10 classes do problema. Na \textit{Hidden Layer} foram feitas as composições de operadores sequenciais a seguir, cujos resultados encontram-se nas imagens indicadas. As duas últimas se tratam de camadas compostas.
-
-\begin{itemize}
-	\item Dense(512) - Figura \ref{fig:dense}
-	\item Conv2D(32, (3, 3)) - Figura \ref{fig:conv}
-	\item Dense(512) \& Conv2D(32, (3, 3)) - Figura \ref{fig:dense_conv}
-	\item Conv2D(32, (3, 3)) \& Dense(512) - Figura \ref{fig:conv_dense}
-\end{itemize}
-
-\begin{figure}[h!]
-	\includegraphics[scale=0.4]{dense.png}
-	\caption{Acuracia para treino e validação}
-	\label{fig:dense}
-\end{figure}
-
-\begin{figure}[h!]
-	\includegraphics[scale=0.4]{conv.png}
-	\caption{Acuracia para treino e validação}
-	\label{fig:conv}
-\end{figure}
-
-\begin{figure}[h!]
-	\includegraphics[scale=0.4]{dense_conv.png}
-	\caption{Acuracia para treino e validação}
-	\label{fig:dense_conv}
-\end{figure}
-
-\begin{figure}[h!]
-	\includegraphics[scale=0.4]{conv_dense.png}
-	\caption{Acuracia para treino e validação}
-	\label{fig:conv_dense}
-\end{figure}
-
-Por conta da dimensão do conjunto de treino, foram utilizadas apenas 10\% das entradas. Então, o conjunto de treino foi dividido em treino e validação (utilizando uma proporção de 0.7) a fim de validar os modelos propostos. Os melhores resultados do conjunto de validação para cada modelo foram: 
-
-\begin{itemize}
-	\item Dense(512) - $0.4327$
-	\item Conv2D(32, (3, 3)) - $0.4607$
-	\item Dense(512) \& Conv2D(32, (3, 3)) - $0.4433$
-	\item Conv2D(32, (3, 3)) \& Dense(512) - $0.4587$
-\end{itemize}
-
-Aplicando a rede neural encontrada nas melhores épocas para o modelo \textit{Conv2D(32, (3, 3))} e para o modelo \textit{Conv2D(32, (3, 3)) \& Dense(512)} utilizando o conjunto de testes, encontrou-se uma acuracia de $0.4673$ e $0.4374$, respectivamente. 
-
-A maior acuracia encontrada pela rede \textit{Conv2D(32, (3, 3))} pode ser atribuida a quantidade reduzida de dados utilizados, visto que por ser uma rede mais simples necessita de menor número de treinos para calibrar seus valores. 
-
-Finalmente, a fim de comparar a Ativação utilizando \textit{ReLU}, executou-se o modelo \textit{Conv2D(32, (3, 3)) \& Dense(512)} utilizando como método de ativação a Tangente Hiperbólica: $f(x) = htan(x)$. A maior acurácia encontrada para o conjunto de validação foi de $0.3320$, apontando uma vantagem para a utilização do \textit{ReLU}. 
+No mínimo, conseguimos ganhar em desempenho computacional pois estamos rodando K-Means com um número menor de dados, assim demorando menos para treinar ou predizer valores.
 
 \section{Conclusões}
-Sobre as soluções propostas, aquelas que se utilizaram de processamento de imagem não trouxeram melhoras para o modelo. No entanto, a solução utilizando PCA trouxe melhoras tanto para o resultado quanto para tempo de computação do modelo, demonstrando a vantagem de usar a redução de dimensionalidade por este método.
+Não ter uma `resposta correta` torna muito diferente e difícil a resolução de problemas. Aprendizado não-supervisionado requere mesmo uma análise do tipo de dado ou alguma técnica ou heurística para auxiliar na resolução dos problemas. No caso de nossos experimentos do K-Means, conseguimos achar um resultado coerente usando uma técnica conhecida, o Elbow Method. Sendo que DBSCAN, que parece que uma solução até mais robusta, nos trouxe dificuldades para calibrar seus parâmetros.
 
-Com relação a modelagem utilizando Redes neurais, poderia-se estudar a acuracia para um número maior de camadas, além da utilização mais estensiva de operadores convolucionais. Outra analise que pode ser feita em estudos posteriores é a utilização de Dropout, que utiliza da desativação de neurônios aleatórios de uma camada, evitando overfit e gerando redundâncias na rede neural. 
+Não ter uma resposta exata para o problema também traz dificuldade para verificar o desempenho. Utilizamos o Silhoutte Coefficient e uma pequena checagem de alguns casos, mostrando alguns resultados bons.
 
 \begin{thebibliography}{00}
 \bibitem{linearregression1} Montgomery, D.C., Peck, E.A. and Vining, G.G., 2015. Introduction to linear regression analysis. John Wiley \& Sons.

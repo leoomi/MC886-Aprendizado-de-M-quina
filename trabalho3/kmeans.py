@@ -30,6 +30,8 @@ print("done")
 #     print(i, kmeans.inertia_)
 # print("done");
 
+
+## Check a given cluster
 kmeans = KMeans(n_clusters=151, random_state=0, verbose=False, max_iter=300, n_init=3).fit(data)
 buck = []
 cluster = 17
@@ -37,6 +39,7 @@ for i in range(len(data)):
     t = kmeans.predict([data[i]])
     if t == cluster:
         buck.append((kmeans.transform([data[i]])[0][cluster], i))
-    print(i)
+    if i % 100 == 0:
+        print(i)
 
-print(buck)
+print(sorted(buck))

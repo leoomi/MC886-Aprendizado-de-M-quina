@@ -20,17 +20,17 @@ data = [list(map(float, i)) for i in data]
 X = np.array(data)
 print("done")
 
-for i in [500, 250, 100, 10]:
+for i in [1000, 500, 250, 100, 10]:
     print("Starting PCA")
     pca = PCA(n_components=i, whiten=True)
-    pca.fit(data)
-    data = pca.transform(data)
+    pca.fit(X)
+    pcaX = pca.transform(X)
     
-    print(data.shape)
+    print(pcaX.shape)
     print("PCA finished")
     
     clusterer = KMeans(n_clusters=151, random_state=10)
-    cluster_labels = clusterer.fit_predict(X)
-    silhouette_avg = silhouette_score(X, cluster_labels)
+    cluster_labels = clusterer.fit_predict(pcaX)
+    silhouette_avg = silhouette_score(pcaX, cluster_labels)
     print(i)
     print("Score: ", silhouette_avg)
